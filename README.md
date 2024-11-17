@@ -15,7 +15,6 @@ sudo dnf install ansible -y
 Ejecutar el playbook:
 
 ```bash
-Copiar código
 ansible-playbook playbooks/ssh_security.yml
 ```
 

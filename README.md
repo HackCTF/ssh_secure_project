@@ -7,13 +7,17 @@ Este proyecto configura servidores con:
 
 ## Uso
 
-1. Instalar Ansible:
+Instalar Ansible:
 ```bash
 sudo dnf install ansible -y
 ```
 
-Ejecutar el playbook:
+clonar el proyecto:
+```bash
+git clone https://github.com/HackCTF/ssh_secure_project.git
+```
 
+Ejecutar el playbook:
 ```bash
 ansible-playbook playbooks/ssh_security.yml
 ```

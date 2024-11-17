@@ -1,0 +1,46 @@
+- name: Detener y deshabilitar sshd
+  ansible.builtin.systemd:
+    name: sshd
+    state: stopped
+    enabled: false
+
+- name: Generar nuevas claves SSH
+  ansible.builtin.command:
+    cmd: /usr/bin/ssh-keygen -A
+
+- name: Configurar SELinux para puerto SSH
+  ansible.posix.seport:
+    ports: "{{ ssh_port }}"
+    proto: tcp
+    setype: ssh_port_t
+    state: present
+
+#- name: Agregar reglas de port knocking en iptables
+#  ansible.builtin.command:
+#    cmd: >
+#      iptables -A INPUT -p tcp --dport {{ knock_ports[0] }} -j ACCEPT &&
+#      iptables -A INPUT -p tcp --dport {{ knock_ports[1] }} -m state --state NEW,ESTABLISHED -j ACCEPT &&
+#      iptables -A INPUT -p tcp --dport {{ knock_ports[2] }} -m state --state NEW,ESTABLISHED -j ACCEPT &&
+#      iptables -A INPUT -p tcp --dport {{ ssh_port }} -m state --state NEW,ESTABLISHED -j ACCEPT
+
+- name: Abrir puerto SSH en firewalld
+  ansible.builtin.firewalld:
+    port: "{{ ssh_port }}/tcp"
+    permanent: true
+    state: enabled
+
+- name: Recargar firewalld
+  ansible.builtin.service:
+    name: firewalld
+    state: reloaded
+
+- name: Configurar sshd
+  ansible.builtin.template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+
+- name: Reiniciar y habilitar sshd
+  ansible.builtin.systemd:
+    name: sshd
+    state: started
+    enabled: true

@@ -1,0 +1,4 @@
+- name: Configurar servidores con SSH seguro y port knocking
+  hosts: ssh_servers
+  roles:
+    - ssh_secure

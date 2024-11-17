@@ -9,11 +9,8 @@
     cmd: /usr/bin/ssh-keygen -A
 
 - name: Configurar SELinux para puerto SSH
-  ansible.posix.seport:
-    ports: "{{ ssh_port }}"
-    proto: tcp
-    setype: ssh_port_t
-    state: present
+  command: semanage port -a -t ssh_port_t -p tcp {{ ssh_port }}
+  become: true
 
 #- name: Agregar reglas de port knocking en iptables
 #  ansible.builtin.command:

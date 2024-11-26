@@ -16,7 +16,10 @@ clonar el proyecto:
 ```bash
 git clone https://github.com/HackCTF/ssh_secure_project.git
 ```
-
+Ejecutar las dependencias:
+```bash
+python -m pip install -r requirements.txt
+```
 Ejecutar el playbook:
 ```bash
 ansible-playbook playbooks/ssh_security.yml
